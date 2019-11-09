@@ -50,7 +50,9 @@ export default {
   data() {
     return {
       list:[],
-      columns
+      columns,
+      xAxis:[],
+      series:[]
     }
   },
   props: ['mid'],
@@ -59,25 +61,31 @@ export default {
     axios.get(URL+'/boxoffice/?mid='+self.mid)
     .then(function (response) {
       self.list=response.data;
-    });
-  },
-  mounted() {
+    })
+    .then(function() {
+      for(let item of self.list){
+        self.xAxis.push(item.week);
+        self.series.push(item.one_week_box_office);
+      }
+      self.xAxis = self.xAxis.reverse();
+      self.series = self.series.reverse();
       var dom = document.getElementById('echarts');
-      var myChart = this.echarts.init(dom);
-      // 绘制图表
-      myChart.setOption({
+      var myChart = self.echarts.init(dom);
+      var option = {
         xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: self.xAxis
         },
         yAxis: {
             type: 'value'
         },
         series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: self.series,
             type: 'line'
         }]
-    });
+      };
+      myChart.setOption(option);
+    })
   }
 }
 
