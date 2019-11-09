@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  front:
+    build: .
+    container_name: vuejs_app
+    env_file: .env
+    restart: always
+    ports:
+      - "8080:80"
