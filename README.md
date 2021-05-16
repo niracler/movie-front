@@ -1,5 +1,7 @@
 # movie-front
 
+> just for interview
+
 ## Project setup
 ```
 npm install
